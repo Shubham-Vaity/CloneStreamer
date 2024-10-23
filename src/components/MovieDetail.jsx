@@ -5,7 +5,7 @@ const MovieDetail = () => {
   const { id } = useParams();
   const [movie, setMovie] = useState({});
   const [cast, setCast] = useState([]);
-  const apiKey = import.meta.env.VITE_API_KEY;
+  const apiKey = "c45a857c193f6302f2b5061c3b85e743";
 
  
   useEffect(() => {
