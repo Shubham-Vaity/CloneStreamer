@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom'; 
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 const Header = () => {
   const [randomImages, setRandomImages] = useState([]);
   const apiKey = 'c45a857c193f6302f2b5061c3b85e743'; 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const fetchRandomMovies = async () => {
@@ -33,9 +35,16 @@ const Header = () => {
     return () => clearInterval(interval);
   }, [randomImages]);
 
+  const handleNavigation = (sectionId) => {
+    if (location.pathname !== '/home') {
+      navigate('/home', { state: { scrollTo: sectionId } });
+    } else {
+      document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
-    <header className="relative w-full mx-auto bg-gray-800"> 
-      
+    <header className="relative w-full mx-auto bg-gray-800">
       <div className="flex justify-between items-center w-full p-4 bg-black bg-opacity-75 z-10">
         <div className="flex items-center">
           <img src="https://play-lh.googleusercontent.com/YzCzgysrtn5_-shQVFB7zj8JRP6SSn2fKtfoGvHWrPAeQu4fsuMj44HZtaTtjiQes1g" alt="Logo" className="h-10" />
@@ -55,27 +64,32 @@ const Header = () => {
                 </Link>
               </li>
               <li>
-                <Link to="./home" className="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">
+                <Link to="/home" className="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">
                   Movies
                 </Link>
               </li>
               <li>
-                <Link to="/about" className="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">
-                  About Us
-                </Link>
+                <button
+                  onClick={() => handleNavigation('top-rated')}
+                  className="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium text-white"
+                >
+                  Top Rated Movies
+                </button>
               </li>
               <li>
-                <Link to="/contact" className="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">
-                  Contact
-                </Link>
+                <button
+                  onClick={() => handleNavigation('upcoming')}
+                  className="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium text-white"
+                >
+                  Upcoming Movies
+                </button>
               </li>
             </ul>
           </nav>
         </div>
       </div>
 
-     
-      <div className="mt-4 relative"> 
+      <div className="mt-4 relative">
         {randomImages.length > 0 && (
           <img
             key={randomImages[currentImageIndex].id}
